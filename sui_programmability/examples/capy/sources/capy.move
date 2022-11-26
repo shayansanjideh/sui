@@ -16,6 +16,10 @@ module capy::capy {
     use std::hash::sha3_256 as hash;
 
     use capy::hex;
+    #[test_only]
+    use sui::test_scenario::Scenario;
+    #[test_only]
+    use sui::test_scenario;
 
     /// Number of meaningful genes. Also marks the length
     /// of the hash used in the application: sha3_256.
@@ -405,4 +409,33 @@ module capy::capy {
 
         url::new_unsafe_from_bytes(capy_url)
     }
+
+    #[test_only]
+    public fun init_for_test(ctx: &mut TxContext) {
+        let id = object::new(ctx);
+        let capy_hash = hash(object::uid_to_bytes(&id));
+
+        emit(RegistryCreated { id: object::uid_to_inner(&id) });
+
+        transfer::transfer(CapyManagerCap { id: object::new(ctx) }, tx_context::sender(ctx));
+        transfer::share_object(CapyRegistry {
+            id,
+            capy_hash,
+            capy_born: 0,
+            capy_day: 0,
+            genes: vec::empty()
+        })
+    }
+
+    #[test_only]
+    public fun batch_for_test(
+        _: &CapyManagerCap,
+        reg: &mut CapyRegistry,
+        scenario: &mut Scenario
+    ) {
+        let ctx = test_scenario::ctx(scenario);
+        let genes = vector[hash(vector[0]), hash(vector[1])];
+        batch(_, reg, genes, ctx)
+    }
+
 }
