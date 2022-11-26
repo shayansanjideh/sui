@@ -2,7 +2,7 @@
 module capy::capy_tests {
     use sui::test_scenario::{Self};
     use capy::capy;
-    use capy::capy::{batch_for_test, CapyManagerCap, CapyRegistry, Capy};
+    use capy::capy::{CapyManagerCap, CapyRegistry, Capy};
     use sui::transfer;
 
     const ADMIN: address = @0x123;
@@ -31,7 +31,7 @@ module capy::capy_tests {
         {
             let capy_manager_cap = test_scenario::take_from_sender<CapyManagerCap>(&mut scenario);
             let reg = test_scenario::take_shared<CapyRegistry>(&mut scenario);
-            batch_for_test(&capy_manager_cap, &mut reg, &mut scenario);
+            capy::batch_for_test(&capy_manager_cap, &mut reg, &mut scenario);
             test_scenario::return_to_sender(&scenario, capy_manager_cap);
             test_scenario::return_shared(reg);
         };
@@ -51,7 +51,7 @@ module capy::capy_tests {
         {
             let capy_manager_cap = test_scenario::take_from_sender<CapyManagerCap>(&mut scenario);
             let reg = test_scenario::take_shared<CapyRegistry>(&mut scenario);
-            batch_for_test(&capy_manager_cap, &mut reg, &mut scenario);
+            capy::batch_for_test(&capy_manager_cap, &mut reg, &mut scenario);
             test_scenario::return_to_sender(&scenario, capy_manager_cap);
             test_scenario::return_shared(reg);
         };
