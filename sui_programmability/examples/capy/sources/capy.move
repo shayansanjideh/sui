@@ -16,10 +16,6 @@ module capy::capy {
     use std::hash::sha3_256 as hash;
 
     use capy::hex;
-    #[test_only]
-    use sui::test_scenario::Scenario;
-    #[test_only]
-    use sui::test_scenario;
 
     /// Number of meaningful genes. Also marks the length
     /// of the hash used in the application: sha3_256.
@@ -409,6 +405,11 @@ module capy::capy {
 
         url::new_unsafe_from_bytes(capy_url)
     }
+
+    // ================ Test-Only Functions ================
+
+    #[test_only]
+    use sui::test_scenario::{Self, Scenario};
 
     #[test_only]
     public fun init_for_test(ctx: &mut TxContext) {
